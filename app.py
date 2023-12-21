@@ -14,7 +14,8 @@ from functools import lru_cache
 
 st.title("🕵️‍Chatter")
 # add your URI for MongoClient
-client = MongoClient("replace with your URI here", tlsCAFile=certifi.where())
+uri = "replace with your URI here"
+client = MongoClient(uri, tlsCAFile=certifi.where())
 db = client['vertexaiApp']
 
 
@@ -84,8 +85,8 @@ def search_docs():
         submitted = st.form_submit_button('🔍 SEARCH')
         if submitted:
             llm = VertexAI()
-            print(llm(text))
-            st.info(llm(text))
+            print(handle_userinput(text))
+            # st.info(llm(text))
 
 
 def get_text_chunks(text):
@@ -131,6 +132,8 @@ def upload_docs():
 
 
 st.session_state.vectorstore = get_vector_store()
+st.session_state.chat_history = []
+
 page_names_to_funcs = {
     "Welcome": intro,
     "Search data": search_docs,
